@@ -1,4 +1,0 @@
-Deep Dive: Props, State and This
-Deep Dive: Lifecyles in React 
-USE REACT-REDUX-ROUTER
-DELETE "node-sass": "^4.13.1" EVERY TIME
