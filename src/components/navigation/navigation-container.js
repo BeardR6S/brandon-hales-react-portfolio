@@ -22,9 +22,6 @@ export default class NavigationComponent extends Component {
         <NavLink to='/blog' activeClassName='nav-link-active'>
           Blog
         </NavLink>
-
-        <button>Contact</button>
-        <button>Blog</button>
         {false ? <button>Add Blog</button> : null}
       </div>
     );
