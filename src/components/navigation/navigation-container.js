@@ -17,7 +17,7 @@ export default class NavigationComponent extends Component {
           About
         </NavLink>
         <NavLink to='/contact' activeClassName='nav-link-active'>
-          contact
+          Contact
         </NavLink>
         <NavLink to='/blog' activeClassName='nav-link-active'>
           Blog
