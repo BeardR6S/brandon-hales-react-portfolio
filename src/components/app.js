@@ -20,11 +20,15 @@ export default class App extends Component {
             <NavigationContainer />
 
             <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/about-me" component={About} />
-              <Route path="/contact" component={Contact} />
-              <Route path="/blog" component={Blog} />
-              <Route path="/portfolio/:slug" component={PortfolioDetail} />
+              <Route exact path='/' component={Home} />
+              <Route path='/about-me' component={About} />
+              <Route path='/contact' component={Contact} />
+              <Route path='/blog' component={Blog} />
+              <Route
+                exact
+                path='/portfolio/:slug'
+                component={PortfolioDetail}
+              />
               <Route component={NoMatch} />
             </Switch>
           </div>
