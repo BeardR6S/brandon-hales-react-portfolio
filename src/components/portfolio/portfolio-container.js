@@ -10,42 +10,10 @@ export default class PortfolioContainer extends Component {
     this.state = {
       pageTitle: "Welcome to my portfolio",
       isLoading: false,
-      data: [
-        {
-          title: "United States Army",
-          category: "Government",
-          slug: "Military",
-        },
-        {
-          title: "Continental Building Products",
-          category: "Manufacturing",
-          slug: "Continental",
-        },
-        {
-          title: "Anderson Manufacturing and Rifles",
-          category: "Government",
-          slug: "Anderson",
-        },
-        {
-          title: "L3 Harris Technologies",
-          category: "Government",
-          slug: "L3-Harris",
-        },
-        {
-          title: "Bosch",
-          category: "Inventory Management",
-          slug: "Bosch",
-        },
-        {
-          title: "Amazon",
-          category: "Inventory Management",
-          slug: "Amazon",
-        },
-      ],
+      data: [],
     };
 
     this.handleFilter = this.handleFilter.bind(this);
-    this.getPortfolioItems = this.getPortfolioItems.bind(this);
   }
 
   handleFilter(filter) {
@@ -59,28 +27,37 @@ export default class PortfolioContainer extends Component {
   getPortfolioItems() {
     axios
       .get("https://brandonhale.devcamp.space/portfolio/portfolio_items")
-      .then(response => {
-        console.log("response data", response);
+      .then((response) => {
+        this.setState({
+          data: response.data.portfolio_items,
+        });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
 
   portfolioItems() {
-    return this.state.data.map(item => {
+    return this.state.data.map((item) => {
       return (
-        <PortfolioItem title={item.title} url={"google.com"} slug={item.slug} />
+        <PortfolioItem
+          key={item.id}
+          title={item.name}
+          url={item.url}
+          slug={item.id}
+        />
       );
     });
+  }
+
+  componentDidMount() {
+    this.getPortfolioItems();
   }
 
   render() {
     if (this.state.isLoading) {
       return <div>Loading...</div>;
     }
-
-    this.getPortfolioItems();
 
     return (
       <div>
