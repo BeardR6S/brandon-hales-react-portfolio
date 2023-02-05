@@ -54,8 +54,6 @@ export default class PortfolioContainer extends Component {
 
     return (
       <div>
-        <h2>{this.state.pageTitle}</h2>
-
         <button onClick={() => this.handleFilter("Government")}>
           Government
         </button>
