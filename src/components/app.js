@@ -48,10 +48,6 @@ export default class App extends Component {
     this.checkLoginStatus();
   }
 
-  componentDidMount() {
-    this.checkLoginStatus;
-  }
-
   render() {
     return (
       <div className='container'>
