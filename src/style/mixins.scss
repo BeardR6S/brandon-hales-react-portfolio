@@ -3,6 +3,8 @@
   height: 42px;
   font-size: 1em;
   font-weight: 500;
+  border-radius: 5px;
+  height: 30px;
   border: 1px solid transparent;
   transition: all 0.5s ease-in-out;
   background-color: $teal;
@@ -38,4 +40,9 @@
       border-bottom: 1px solid $dark-teal;
     }
   }
+}
+
+@mixin base-grid() {
+  display: grid;
+  grid-gap: 21px;
 }
