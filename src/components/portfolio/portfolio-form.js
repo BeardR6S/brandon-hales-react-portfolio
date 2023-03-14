@@ -46,7 +46,7 @@ export default class PortfolioForm extends Component {
         position,
         url,
         thumb_image_url,
-        banner_image,
+        banner_image_url,
         logo_url,
       } = this.props.portfolioToEdit;
 
@@ -63,6 +63,9 @@ export default class PortfolioForm extends Component {
         apiUrl: `https://brandonhale.devcamp.space/portfolio/portfolio_items/${id}`,
         //? patch is used for updating something
         apiAction: "patch",
+        thumb_image: thumb_image_url || "",
+        banner_image: banner_image_url || "",
+        logo: logo_url || "",
       });
     }
   }
@@ -219,32 +222,49 @@ export default class PortfolioForm extends Component {
         </div>
 
         <div className='image-uploaders'>
-          <DropzoneComponent
-            ref={this.thumbRef}
-            config={this.componentConfig()}
-            djsConfig={this.djsConfig()}
-            eventHandlers={this.handleThumbDrop()}
-          >
-            <div className='dz-message'>Thumbnail Image</div>
-          </DropzoneComponent>
-
-          <DropzoneComponent
-            ref={this.bannerRef}
-            config={this.componentConfig()}
-            djsConfig={this.djsConfig()}
-            eventHandlers={this.handleBannerDrop()}
-          >
-            <div className='dz-message'>Banner Image</div>
-          </DropzoneComponent>
-
-          <DropzoneComponent
-            ref={this.logoRef}
-            config={this.componentConfig()}
-            djsConfig={this.djsConfig()}
-            eventHandlers={this.handleLogoDrop()}
-          >
-            <div className='dz-message'>Logo Image</div>
-          </DropzoneComponent>
+          {/* Ternary Operators = {true ? "do if true" : "do if false"} */}
+          {this.state.thumb_image && this.state.editMode ? (
+            <div className='portfolio-manager-image-wrapper'>
+              <img src={this.state.thumb_image} />
+            </div>
+          ) : (
+            <DropzoneComponent
+              ref={this.thumbRef}
+              config={this.componentConfig()}
+              djsConfig={this.djsConfig()}
+              eventHandlers={this.handleThumbDrop()}
+            >
+              <div className='dz-message'>Thumbnail Image</div>
+            </DropzoneComponent>
+          )}
+          {this.state.banner_image && this.state.editMode ? (
+            <div className='portfolio-manager-image-wrapper'>
+              <img src={this.state.banner_image} />
+            </div>
+          ) : (
+            <DropzoneComponent
+              ref={this.bannerRef}
+              config={this.componentConfig()}
+              djsConfig={this.djsConfig()}
+              eventHandlers={this.handleBannerDrop()}
+            >
+              <div className='dz-message'>Banner Image</div>
+            </DropzoneComponent>
+          )}
+          {this.state.logo && this.state.editMode ? (
+            <div className='portfolio-manager-image-wrapper'>
+              <img src={this.state.logo} />
+            </div>
+          ) : (
+            <DropzoneComponent
+              ref={this.logoRef}
+              config={this.componentConfig()}
+              djsConfig={this.djsConfig()}
+              eventHandlers={this.handleLogoDrop()}
+            >
+              <div className='dz-message'>Logo Image</div>
+            </DropzoneComponent>
+          )}
         </div>
 
         <div>
