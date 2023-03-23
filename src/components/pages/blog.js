@@ -14,11 +14,35 @@ class Blog extends Component {
       totalCount: 0,
       currentPage: 0,
       isLoading: true,
+      blogModalIsOpen: false,
     };
 
     this.getBlogItems = this.getBlogItems.bind(this);
     this.onScroll = this.onScroll.bind(this);
     window.addEventListener("scroll", this.onScroll, false);
+    this.handleNewBlogClick = this.handleNewBlogClick.bind(this);
+    this.handleModalClose = this.handleModalClose.bind(this);
+    this.handleSuccessfulNewBlogSubmission =
+      this.handleSuccessfulNewBlogSubmission.bind(this);
+  }
+
+  handleSuccessfulNewBlogSubmission(blog) {
+    this.setState({
+      blogModalIsOpen: false,
+      blogItems: [blog].concat(this.state.blogItems),
+    });
+  }
+
+  handleModalClose() {
+    this.setState({
+      blogModalIsOpen: false,
+    });
+  }
+
+  handleNewBlogClick() {
+    this.setState({
+      blogModalIsOpen: true,
+    });
   }
 
   onScroll() {
@@ -77,6 +101,20 @@ class Blog extends Component {
 
     return (
       <div className='blog-container'>
+        <BlogModal
+          handleSuccessfulNewBlogSubmission={
+            this.handleSuccessfulNewBlogSubmission
+          }
+          handleModalClose={this.handleModalClose}
+          modalIsOpen={this.state.blogModalIsOpen}
+        />
+
+        <div className='new-blog-link'>
+          <a onClick={this.handleNewBlogClick}>
+            <FontAwesomeIcon icon='file-circle-plus' />
+          </a>
+        </div>
+
         <div className='content-container'>{blogRecords}</div>
 
         {this.state.isLoading ? (
