@@ -1,3 +1,9 @@
 {
-  "cSpell.words": ["draftjs", "filepicker", "uglifyjs", "uploaders"]
+  "cSpell.words": [
+    "draftjs",
+    "filepicker",
+    "striptags",
+    "uglifyjs",
+    "uploaders"
+  ]
 }
