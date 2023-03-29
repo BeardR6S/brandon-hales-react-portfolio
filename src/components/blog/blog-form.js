@@ -9,10 +9,13 @@ export default class BlogForm extends Component {
     super(props);
 
     this.state = {
+      id: "",
       title: "",
       blog_status: "",
       content: "",
       featured_image: "",
+      apiUrl: "https://brandonhale.devcamp.space/portfolio/portfolio_blogs",
+      apiAction: "post",
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -21,11 +24,41 @@ export default class BlogForm extends Component {
       this.handleRichTextEditorChange.bind(this);
 
     // Below is for the blog modal dropzone image.
+
     this.componentConfig = this.componentConfig.bind(this);
     this.djsConfig = this.djsConfig.bind(this);
     this.handleFeaturedImageDrop = this.handleFeaturedImageDrop.bind(this);
-
+    this.deleteImage = this.deleteImage.bind(this);
     this.featuredImageRef = React.createRef();
+  }
+
+  //TODO Refactor below code as it is used multiple times in the application.
+  deleteImage(imageType) {
+    axios
+      .delete(
+        `https://api.devcamp.space/portfolio/delete-portfolio-blog-image/${this.props.blogEdit.id}?image_type=${imageType}`,
+        { withCredentials: true }
+      )
+      .then((response) => {
+        this.props.handleFeaturedImageDelete();
+      })
+      .catch((error) => {
+        console.log("deleteImage error", error);
+      });
+  }
+
+  componentWillMount() {
+    if (this.props.editMode) {
+      this.setState({
+        id: this.props.blogEdit.id,
+        title: this.props.blogEdit.title,
+        blog_status: this.props.blogEdit.blog_status,
+        content: this.props.blogEdit.content,
+        // !IF CODE DOESN'T WORK, CHANGE blogEdit TO BLOG!!!!!
+        apiUrl: `https://brandonhale.devcamp.space/portfolio/portfolio_blogs/${this.props.blogEdit.id}`,
+        apiAction: "patch",
+      });
+    }
   }
 
   componentConfig() {
@@ -35,6 +68,7 @@ export default class BlogForm extends Component {
       postUrl: "https://httpbin.org/post",
     };
   }
+
   djsConfig() {
     return {
       addRemoveLinks: true,
@@ -71,13 +105,12 @@ export default class BlogForm extends Component {
   }
 
   handleSubmit(event) {
-    axios
-      .post(
-        "https://brandonhale.devcamp.space/portfolio/portfolio_blogs",
-        this.buildForm(),
-        { withCredentials: true }
-      )
-
+    axios({
+      method: this.state.apiAction,
+      url: this.state.apiUrl,
+      data: this.buildForm(),
+      withCredentials: true,
+    })
       .then((response) => {
         if (this.state.featured_image) {
           this.featuredImageRef.current.dropzone.removeAllFiles();
@@ -87,9 +120,17 @@ export default class BlogForm extends Component {
           title: "",
           blog_status: "",
           content: "",
+          featured_image: "",
         });
 
-        this.props.handleSuccessfulFormSubmission(response.data.portfolio_blog);
+        if (this.props.editMode) {
+          //TODO Update blog detail
+          this.props.handleUpdateFormSubmission(response.data.portfolio_blog);
+        } else {
+          this.props.handleSuccessfulFormSubmission(
+            response.data.portfolio_blog
+          );
+        }
       })
       .catch((error) => {
         console.log("handleSubmit for blog error", error);
@@ -128,19 +169,37 @@ export default class BlogForm extends Component {
         <div className='one-column'>
           <RichTextEditor
             handleRichTextEditorChange={this.handleRichTextEditorChange}
+            editMode={this.props.editMode}
+            contentToEdit={
+              this.props.editMode && this.props.blogEdit.content
+                ? this.props.blogEdit.content
+                : null
+            }
           />
         </div>
 
         <div className='image-uploader'>
-          <DropzoneComponent
-            ref={this.featuredImageRef}
-            // below add () to make it run right away.
-            config={this.componentConfig()}
-            djsConfig={this.djsConfig()}
-            eventHandlers={this.handleFeaturedImageDrop()}
-          >
-            <div className='dz-message'>Featured image</div>
-          </DropzoneComponent>
+          {this.props.editMode && this.props.blogEdit.featured_image_url ? (
+            <div className='portfolio-manager-image-wrapper'>
+              <img src={this.props.blogEdit.featured_image_url} />
+              {/* Below is for deleting the featured image within the blog post */}
+              <div className='image-removal-link'>
+                <a onClick={() => this.deleteImage("featured_image")}>
+                  Remove File
+                </a>
+              </div>
+            </div>
+          ) : (
+            <DropzoneComponent
+              ref={this.featuredImageRef}
+              //! below add () to make it run right away.
+              config={this.componentConfig()}
+              djsConfig={this.djsConfig()}
+              eventHandlers={this.handleFeaturedImageDrop()}
+            >
+              <div className='dz-message'>Featured image</div>
+            </DropzoneComponent>
+          )}
         </div>
 
         <button className='btn'>Save</button>

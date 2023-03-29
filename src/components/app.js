@@ -124,7 +124,18 @@ export default class App extends Component {
                 )}
               />
 
-              <Route path='/b/:slug' component={BlogDetail} />
+              <Route
+                path='/b/:slug'
+
+                // ! Below render is so non-logged in users can't access the Edit Feature, even if they could due to API construction it wouldn't be able to be changed, but this is more of a UI big fix.
+                render={(props) => (
+                  <BlogDetail
+                    {...props}
+                    loggedInStatus={this.state.loggedInStatus}
+                  />
+                )}
+              />
+
               {this.state.loggedInStatus === "LOGGED_IN"
                 ? this.authorizedPages()
                 : null}

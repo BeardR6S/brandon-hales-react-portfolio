@@ -5,7 +5,6 @@ import { DropzoneComponent } from "react-dropzone-component";
 import "../../../node_modules/react-dropzone-component/styles/filepicker.css";
 import "../../../node_modules/dropzone/dist/min/dropzone.min.css";
 
-
 export default class PortfolioForm extends Component {
   constructor(props) {
     super(props);
@@ -38,6 +37,7 @@ export default class PortfolioForm extends Component {
     this.logoRef = React.createRef();
   }
 
+  //TODO Create a helper function to refactor the deleteImage as it is used in multiple places within the code.
   deleteImage(imageType) {
     axios
       .delete(
